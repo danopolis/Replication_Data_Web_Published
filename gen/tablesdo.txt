@@ -1,0 +1,63 @@
+******************WOMEN********************
+clear
+set mem 50000
+capture log close
+set more off
+log using tableswomen, text replace
+use allwomen.dta, clear
+**************************
+gen period = 1
+replace period = 2 if year > 1986
+sort period
+* full models
+
+* ABORTION SCALES
+regress abscale inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress abscale inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+* PREMARITAL SEX
+regress premarsx inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress premarsx inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+* GENDER ROLES
+regress genrole inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress genrole inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+* FAMILY RESPONSIBILITIES
+regress famres inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress famres inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+log close
+
+************MEN****************************
+clear
+set mem 50000
+capture log close
+set more off
+log using tablesmen, text replace
+use allmen.dta, clear
+**************************
+gen period = 1
+replace period = 2 if year > 1986
+sort period
+* full models
+
+* ABORTION SCALE
+regress abscale inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress abscale inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+* PREMARITAL SEX
+regress premarsx inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress premarsx inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+* GENDER ROLES
+regress genrole inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress genrole inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+* FAMILY RESPONSIBILITIES
+regress famres inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==1
+regress famres inlab notin prop hours spin spnot widow married nevmar childs age educ maeduc white south midwest srcbelt cath baps jew noneoth attend polviews year if period==2
+
+log close
+
+

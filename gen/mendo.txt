@@ -1,0 +1,218 @@
+***** Variable Coding for Men's Analysis********
+**************************************
+* Abortion scale
+* missing values
+replace abdefect = . if abdefect >= 8
+replace abnomo = . if abnomo >= 8
+replace abhl = . if abhl >= 8
+replace abpo = . if abpo >= 8
+replace abra = . if abra >= 8
+replace absi = . if absi >= 8
+replace abany = . if abany >= 8
+* reverse coding
+replace abdef = 0 if abdef == 2
+replace abnomo = 0 if abnomo == 2
+replace abhl = 0 if abhl == 2
+replace abpo = 0 if abpo == 2
+replace abra = 0 if abra == 2
+replace absi = 0 if absi == 2
+replace abany = 0 if abany == 2
+* add up the scale
+gen abscale = abdef + abnomo + abhl + abpo + abra + absi + abany
+replace abscale = abscale/.7
+**************************************
+* Premarital Sex
+* missing values
+* note the 5 category--other--doesn't come into play because 
+* the 5 response is not given after 1974.  
+replace premar = . if premar >= 8
+* premarital sex recoded to scale from 1 to 10
+replace premarsx = (premarsx-1)/.3
+********
+* Sex roles Scale
+* missing values
+replace fehome = . if fehome >= 8 
+replace fepres = . if fepres >= 5
+replace fepol = . if fepol >= 8
+* reverse/recode
+replace fehome = fehome - 1
+replace fepres = 0 if fepres == 2
+replace fepol = fepol - 1
+* add up the scale
+gen genrole = fehome + fepres + fepol
+** to make the scale run from 0 to 10, the following recode:
+replace genrole = genrole/.3
+**************************************
+* family responsibilities scale
+* missing values
+replace fechld = . if fechld >=8
+replace fehelp = . if fehelp >=8
+replace fepresch = . if fepresch >=8
+replace fefam = . if fefam >=8
+* reverse code fechld
+replace fechld = (fechld * -1) + 5
+* add up the scale
+gen famresp = fechld + fehelp + fepresch + fefam
+* to make the scle run from 0 to 10, the following recode:
+replace famresp = (famresp-4)/1.2
+**************************************
+* regional definitions
+gen south = 0
+gen midwest = 0
+replace south = 1 if region == 5
+replace south = 1 if region == 6
+replace south = 1 if region == 7
+replace midwest = 1 if region == 3
+replace midwest = 1 if region == 4
+**************************************
+* urban/rural definition
+* note 3 is central cities and suburbs of the 100 lagest MSAs
+* 2 is all the rest of counties having towns of 10000 or more
+* 1 is everthing else
+replace srcbelt = 3 if srcbelt <= 4
+replace srcbelt = 2 if srcbelt == 5
+replace srcbelt = 1 if srcbelt == 6
+**************************************
+* Religion definitions
+* recode missing relig to the none/other group.  
+gen mainline = 0
+gen cath = 0
+gen bapsect = 0
+gen jewish = 0
+gen noneoth = 0
+replace bapsect = 1 if denom >= 10 & denom <= 18
+replace bapsect = 1 if (relig == 1 & denom >= 60)
+replace mainline = 1 if denom >= 20 & denom <= 50
+replace cath = 1 if relig == 2
+replace jewish = 1 if relig == 3
+replace noneoth = 1 if relig >= 4
+*************************************
+* Marital status
+gen married = 1
+gen widowed = 0
+gen divorced = 0
+gen nevmar = 0
+
+replace widowed = 1 if marital == 2
+replace divorced = 1 if marital == 3
+replace divorced = 1 if marital == 4
+replace nevmar = 1 if marital == 5
+
+replace married = 0 if (widowed == 1 | divorced ==1 | nevmar == 1)
+**************************************
+* race recode
+gen white = 0 
+replace white = 1 if race == 1
+**************************************
+* labor force recode
+* To get the variable in Plutzer 1988 paper (never worked and never been in the labor force, 
+* currently in labor force, not currently in labor force but have worked in the past)
+gen inlaborf = 0
+replace inlaborf = 1 if wrkstat <= 4
+gen notinlbf = 0
+replace notinlbf = 1 if inlaborf == 0
+gen nevwork = 0
+replace nevwork = 1 if evwork == 2
+replace notinlbf = 0 if nevwork == 1
+*****************************************
+* spouse labor force recode
+* To get the parallel variable to the above (never worked and never been in the labor force, 
+* currently in labor force, not currently in labor force but have worked in the past)
+gen spinlabo = 0
+replace spinlabo = 1 if spwrksta <= 4
+gen spnotinl = 0
+replace spnotinl = 1 if spinlabo == 0
+gen spnevwor = 0
+replace spnevwor = 1 if spevwork == 2
+replace spnotinl = 0 if spnevwor == 1
+*****************************************
+* income recodes
+* NOTE: we are using realinc and realrinc instead of recoding via Plutzer's
+* procedure.  The results should be similar but this difference will prevent an exact replication.
+* calculate respondent's proportion of family income
+gen propinc = realrinc/realinc
+***************************************
+* hours worked
+replace hrs1 = . if hrs1 == 99
+replace hrs2 = . if hrs2 == 99
+gen hours = hrs1
+replace hours = hrs2 if hrs1 ==.
+**************************************
+* age
+replace age = . if age >= 98
+**************************************
+* political views
+replace polviews = . if polviews >= 8
+**************************************
+* DROP APPROPRIATE ELEMENTS
+**************************************
+* drop Black oversamples
+drop if sample == 4
+drop if sample == 5
+drop if sample == 7
+***************************************
+* drop inappropriate years
+drop if year == 1976
+drop if year == 1979
+drop if year == 1981
+drop if year == 1995
+drop if year == 1997
+***************************************
+* This makes this the do file for men's sample
+* drop women
+drop if sex == 2
+**************************************
+* MISSING TO MEAN RECODES
+**************************************
+replace attend = . if attend >= 9
+replace childs = . if childs >= 9
+replace educ = . if educ >= 98
+replace maeduc = . if maeduc >= 97
+replace paeduc = . if paeduc >= 97
+replace madeg = . if madeg >= 7
+replace padeg = . if padeg >= 7
+* can recover some additional cases by coding means in
+* for age and poliviews
+* replacing with race and sex subgroup means
+sort white
+egen attendm = mean(attend), by(white)
+replace attend = attendm if attend == .
+drop attendm
+egen educm = mean(educ), by (white)
+replace educ = educm if educ == .
+drop educm
+egen maeducm = mean(maeduc), by (white)
+replace maeduc = maeducm if maeduc == .
+drop maeducm
+egen paeducm = mean(paeduc), by (white)
+replace paeduc = paeducm if paeduc == .
+drop paeducm
+egen madegm = mean(madeg), by (white)
+replace madeg = madegm if madeg == .
+drop madegm
+egen padegm = mean(padeg), by (white)
+replace padeg = padegm if padeg == .
+drop padegm
+egen childsm = mean(childs), by (white)
+replace childs = childsm if childs == .
+drop childsm
+egen agem = mean(age), by (white)
+replace age = agem if age == .
+drop agem
+egen polviewm = mean(polviews), by (white)
+replace polviews = polviewm if polviews == .
+drop polviewm
+****************************************************************************
+egen hoursm = mean(hours), by (white)
+replace hours = hoursm if hours == .
+drop hoursm
+**************************************
+* note on propinc, we are replacing after the proportion has been calculated
+* instead of replacing the income and rincome values and then calculating the proportion.
+egen propincm = mean(propinc), by (white)
+replace propinc = propincm if propinc == .
+drop propincm
+**************************************
+compress
+save allmen.dta, replace
+log close
